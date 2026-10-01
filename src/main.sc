@@ -7,18 +7,15 @@ theme: /
         q!: $regex</start>
         a: Привет! Я бот для заказа пиццы.
            Напишите, что хотите заказать, и я помогу оформить доставку.
-        go!: /OrderPizza
+        # НЕТ go!: /OrderPizza — ждём, пока пользователь напишет
 
     state: OrderPizza
         intent!: /OrderPizza
         a: Секунду, начат процесс оформления заказа ...
         # НЕТ go!: /ProcessOrder — слот-филлинг сам передаст управление,
-        # когда все слоты будут заполнены.
+        # когда все слоты будут заполнены
 
     state: ProcessOrder
-        # Этот стейт активируется автоматически, когда слот-филлинг завершён.
-        # Но чтобы JAICP понял, что это продолжение, нужен специальный триггер.
-        event!: slotFillingComplete
         a: Вы заказали: {{$parseTree._size ? $parseTree._size.name : "не указан"}} пиццу на {{$parseTree._base ? $parseTree._base.name : "не указана"}} основе с {{$parseTree._topping ? $parseTree._topping.name : "не указана"}}.
            Доставка по адресу: {{$parseTree._address ? $parseTree._address : "не указан"}}.
            Все верно?
@@ -34,10 +31,12 @@ theme: /
     state: ChangeOrder
         intent!: /ChangeOrder
         a: Понял, меняю.
-        # После изменения снова запускаем слот-филлинг? 
-        # Нет — просто возвращаемся в ProcessOrder.
         go!: /ProcessOrder
 
     state: NoMatch
         event!: noMatch
-        a: Извините, я не понял.
+        a: Я не понял. Вы сказали: {{$request.query}}
+
+    state: Bye
+        intent!: /пока
+        a: Пока пока
