@@ -1,7 +1,5 @@
 name: zb-cailapub
-
 entryPoint: main.sc
-
 botEngine: v2
 language: ru
 
@@ -13,3 +11,8 @@ nlp:
   intentNoMatchThresholds:
     phrases: 0.2
     patterns: 0.2
+
+injector:
+  slotfilling:
+    maxSlotRetries: 3
+    stopOnAnyIntent: false
